@@ -30,7 +30,7 @@ import com.example.movieapp.widgets.MovieRow
 
 @Composable
 fun DetailScreen(
-    navController: NavController = rememberNavController(),
+    navController: NavController,
     movieID: String? = "t0499549"
 ) {
     val movie = filterMovie(movieID = movieID)
@@ -43,7 +43,7 @@ fun DetailScreen(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Arrow Back",
                         modifier = Modifier.clickable {
-                            navController.popBackStack() //gibt false zurück, screen bleibt, wie er ist
+                            navController.popBackStack()
                             //Log.d(MovieScreens.DetailScreen.name, )
                         }
                     )
@@ -56,7 +56,7 @@ fun DetailScreen(
     }
 }
 
-//in Homescreen hat die Homescreen funktion die Topappbar und Maincontent ruft nur die Movierow auf
+
 @Composable
 fun MainContent(movie: Movie) {
 

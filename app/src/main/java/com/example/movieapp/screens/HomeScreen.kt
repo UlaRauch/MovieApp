@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 import com.example.movieapp.navigation.MovieScreens
@@ -23,7 +25,7 @@ import com.example.movieapp.widgets.MovieRow
 
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavHostController = rememberNavController()) {
     var showMenu by remember {
         mutableStateOf(false)
     }
@@ -62,12 +64,16 @@ fun HomeScreen(navController: NavController) {
 }
 
 @Composable
-fun MainContent(movieList: List<Movie> = getMovies(), navController: NavController) {
+fun MainContent(
+    movieList: List<Movie> = getMovies(),
+    navController: NavController) {
     //listOf("Harry Potter and the Philosopher's Stone", "Harry Potter and the Chamber of Secrets", "Harry Potter and the Prisoner of Azkaban")
     LazyColumn {
         items(movieList) { movie ->
-            MovieRow(movie = movie) { movieID ->
-            navController.navigate(route = MovieScreens.DetailScreen.name + "/$movieID")
+            MovieRow(movie = movie) {
+                    movieID ->
+                navController.navigate("HomeScreen")
+                navController.navigate(MovieScreens.DetailScreen.name + "/$movieID")
         } }
     }
 }

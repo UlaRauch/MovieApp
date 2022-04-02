@@ -40,7 +40,7 @@ fun FavoritesScreen(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Arrow Back",
                         modifier = Modifier.clickable {
-                            navController.popBackStack() //gibt false zurück, screen bleibt, wie er ist
+                            navController.popBackStack()
                             //Log.d(MovieScreens.DetailScreen.name, )
                         }
                     )
@@ -54,7 +54,7 @@ fun FavoritesScreen(
     }
 }
 
-//in Homescreen hat die Homescreen funktion die Topappbar und Maincontent ruft nur die Movierow auf
+
 @Composable
 fun MainContent(favorites: List<String>, navController: NavController) {
 
@@ -66,9 +66,9 @@ fun MainContent(favorites: List<String>, navController: NavController) {
 
         LazyColumn {
             items(favorites) { id ->
-                MovieRow(movie = filterMovie(id))  {movieID ->
-                navController.navigate(route = MovieScreens.DetailScreen.name + "/$movieID")
-            }
+                MovieRow(movie = filterMovie(id)) { movieID ->
+                    navController.navigate(route = MovieScreens.DetailScreen.name + "/$movieID")
+                }
             }
         }
     }
