@@ -32,6 +32,7 @@ import com.example.movieapp.navigation.MovieNavigation
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             MovieAppTheme {
                 // A surface container using the 'background' color from the theme
@@ -40,8 +41,32 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
+    override fun onStart() {
+        super.onStart()
+        Log.i("Mainactivity", "onStart called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("Mainactivity", "onResume called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i("Mainactivity", "onPause called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("Mainactivity", "onStop called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("Mainactivity", "onDestroy called")
+    }
+}
 
 @Preview(showBackground = true)
 @Composable

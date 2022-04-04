@@ -1,5 +1,6 @@
 package com.example.movieapp.widgets
 
+import android.util.Log
 import android.widget.HorizontalScrollView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -13,9 +14,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,14 +28,22 @@ import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.example.movieapp.MainActivity
 import com.example.movieapp.R
+import com.example.movieapp.models.FavoritesViewModel
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MovieRow(movie: Movie = getMovies()[0], onItemClick: (String) -> Unit = {}) {
+fun MovieRow(
+    movie: Movie = getMovies()[0],
+    isFavorite: Boolean,
+    onItemClick: (String) -> Unit = {},
+    onFavoriteClick: (Movie) -> Unit = {},
+    //content: @Composable () -> Unit = {} //??? wirklich mit allen
+) {
     var showInfo by remember {
         mutableStateOf(false)
     }
@@ -64,7 +71,7 @@ fun MovieRow(movie: Movie = getMovies()[0], onItemClick: (String) -> Unit = {}) 
                     .size(100.dp),
                 elevation = 4.dp
             ) {
-               // Icon(imageVector = Icons.Default.AccountBox, contentDescription = "movie pic")
+                // Icon(imageVector = Icons.Default.AccountBox, contentDescription = "movie pic")
                 AsyncImage(
                     model = movie.images[0],
                     contentDescription = "round image",
@@ -79,9 +86,12 @@ fun MovieRow(movie: Movie = getMovies()[0], onItemClick: (String) -> Unit = {}) 
                 Text(text = "Director: ${movie.director}")
                 Text(text = "Released: ${movie.year}")
                 AnimatedVisibility(visible = showInfo) {
-                    Column (modifier = Modifier.padding(8.dp)) {
+                    Column(modifier = Modifier.padding(8.dp)) {
                         Text(text = "Plot: ${movie.plot}")
-                        Divider(modifier = Modifier.padding(3.dp), color = Color.LightGray) //horizontal grey line in screenshot
+                        Divider(
+                            modifier = Modifier.padding(3.dp),
+                            color = Color.LightGray
+                        ) //horizontal grey line in screenshot
                         Text(text = "Genre: ${movie.genre}")
                         Text(text = "Actors: ${movie.actors}")
                         Text(text = "Rating: ${movie.rating}")
@@ -101,6 +111,46 @@ fun MovieRow(movie: Movie = getMovies()[0], onItemClick: (String) -> Unit = {}) 
                     }
                 }
             }
+            Column(modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.End) {
+                //content
+
+                favoriteButton(
+                    movie = movie,
+                    isFavorite = isFavorite
+                ) {
+                    movie -> onFavoriteClick(movie)
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+fun favoriteButton(
+    movie: Movie,
+    isFavorite: Boolean = false,
+    onFavoriteClick: (Movie) -> Unit = {}
+) {
+
+Log.i("Mainactivity", "favoriteButton called")
+
+    IconButton(onClick = {
+        onFavoriteClick(movie)
+    }) {
+        if (!isFavorite) {
+        Icon(
+            imageVector = Icons.Default.FavoriteBorder,
+            contentDescription = "not a favorite",
+            //modifier = Modifier
+        )
+        } else {
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                contentDescription = "is a favorite",
+                //modifier = Modifier
+            )
         }
     }
 }
@@ -108,8 +158,7 @@ fun MovieRow(movie: Movie = getMovies()[0], onItemClick: (String) -> Unit = {}) 
 @Composable
 fun HorizontalScrollableImageView(movie: Movie = getMovies()[0]) {
     LazyRow {
-        items(movie.images) {
-            image ->
+        items(movie.images) { image ->
             Card(
                 modifier = Modifier
                     .padding(12.dp)

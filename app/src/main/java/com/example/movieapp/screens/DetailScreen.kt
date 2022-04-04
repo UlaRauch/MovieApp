@@ -1,35 +1,27 @@
 package com.example.movieapp.screens
 
 
-import android.service.autofill.OnClickAction
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.models.FavoritesViewModel
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
-import com.example.movieapp.navigation.MovieScreens
 import com.example.movieapp.widgets.HorizontalScrollableImageView
 import com.example.movieapp.widgets.MovieRow
 
 
 @Composable
 fun DetailScreen(
+    viewModel: FavoritesViewModel,
     navController: NavController,
     movieID: String? = "t0499549"
 ) {
@@ -52,13 +44,25 @@ fun DetailScreen(
                 }
             }
         }) {
-        MainContent(movie = movie)
+        MainContent(
+            movie = movie,
+            isFavoriteLambda = {
+                    movie -> viewModel.movieIsFavorite(movie)
+            }
+            ) {
+                movie -> if (viewModel.movieIsFavorite(movie)) {
+            viewModel.removeMovie(movie)
+        } else viewModel.addMovie(movie = movie)
+        }
     }
 }
 
 
 @Composable
-fun MainContent(movie: Movie) {
+fun MainContent(
+    movie: Movie,
+    isFavoriteLambda: (Movie) -> Boolean,
+    onFavoriteClick: (Movie) -> Unit = {}) {
 
     Surface(
         modifier = Modifier
@@ -67,7 +71,10 @@ fun MainContent(movie: Movie) {
     ) {
 
         Column {
-            MovieRow(movie = movie)
+            MovieRow(
+                movie = movie,
+                isFavorite = isFavoriteLambda(movie),
+                onFavoriteClick = onFavoriteClick)
             Spacer(modifier = Modifier.height(8.dp))
             Divider()
             Text(text = movie.title, style = MaterialTheme.typography.h5)
