@@ -57,7 +57,7 @@ fun HomeScreen(
     ) {
         MainContent(
             navController = navController,
-            isFavoriteLambda = {
+            checkIfFavorite = {
                 movie -> viewModel.movieIsFavorite(movie)
             }
         ) {
@@ -72,7 +72,7 @@ fun HomeScreen(
 fun MainContent(
     movieList: List<Movie> = getMovies(),
     navController: NavController,
-    isFavoriteLambda: (Movie) -> Boolean,
+    checkIfFavorite: (Movie) -> Boolean,
     onFavoriteClick: (Movie) -> Unit = {}
 ) {
     //listOf("Harry Potter and the Philosopher's Stone", "Harry Potter and the Chamber of Secrets", "Harry Potter and the Prisoner of Azkaban")
@@ -80,29 +80,19 @@ fun MainContent(
         items(movieList) { movie ->
             MovieRow(
                 movie = movie,
-                //isFavorite = isFavoriteLambda(movie),
-                //showFavoriteButton = true,
-                //onFavoriteClick = onFavoriteClick,
+                isFavorite = checkIfFavorite(movie),
+                onFavoriteClick = onFavoriteClick,
                 onItemClick = { movieID ->
-                    navController.navigate("HomeScreen")
+                    //navController.navigate("HomeScreen")
                     navController.navigate(MovieScreens.DetailScreen.name + "/$movieID")
                 },
-                favoriteButton = FavoriteButton(
-                    movie = movie,
-                    isFavorite = isFavoriteLambda(movie),
-                    onFavoriteClick = onFavoriteClick)
-                /*
-                content = {
-                    favoriteButton(
-                        movie = movie,
-                        isFavorite = isFavoriteLambda(movie)
-                    ) { movie ->
-                        onFavoriteClick(movie)
-                    }
+                favoriteButton = { mov, isFav, clickFav ->
+                    FavoriteButton(
+                        movie = mov,
+                        isFavorite = isFav,
+                        onFavoriteClick = clickFav
+                    )
                 }
-
-                 */
-
             )
         }
     }

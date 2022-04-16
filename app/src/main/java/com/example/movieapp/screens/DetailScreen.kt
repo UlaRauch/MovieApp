@@ -46,9 +46,7 @@ fun DetailScreen(
         }) {
         MainContent(
             movie = movie,
-            isFavoriteLambda = { movie ->
-                viewModel.movieIsFavorite(movie)
-            }
+            isFavorite = viewModel.movieIsFavorite(movie)
         ) { movie ->
             if (viewModel.movieIsFavorite(movie)) {
                 viewModel.removeMovie(movie)
@@ -61,7 +59,7 @@ fun DetailScreen(
 @Composable
 fun MainContent(
     movie: Movie,
-    isFavoriteLambda: (Movie) -> Boolean,
+    isFavorite: Boolean = false,
     onFavoriteClick: (Movie) -> Unit = {}
 ) {
 
@@ -74,15 +72,17 @@ fun MainContent(
         Column {
             MovieRow(
                 movie = movie,
-                //isFavorite = isFavoriteLambda(movie),
-                //showFavoriteButton = true,
-                //onFavoriteClick = onFavoriteClick,
-                favoriteButton = FavoriteButton(
-                    movie = movie,
-                    isFavorite = isFavoriteLambda(movie),
-                    onFavoriteClick = onFavoriteClick
-                )
+                isFavorite = isFavorite,
+                onFavoriteClick = onFavoriteClick,
+                favoriteButton = { mov, isFav, clickFav ->
+                    FavoriteButton(
+                        movie = mov,
+                        isFavorite = isFav,
+                        onFavoriteClick = clickFav
+                    )
+                }
             )
+
             Spacer(modifier = Modifier.height(8.dp))
             Divider()
             Text(text = movie.title, style = MaterialTheme.typography.h5)

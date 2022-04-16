@@ -29,12 +29,10 @@ import com.example.movieapp.models.getMovies
 @Composable
 fun MovieRow(
     movie: Movie = getMovies()[0],
-    //isFavorite: Boolean = false,
-    //showFavoriteButton: Boolean = true,
     onItemClick: (String) -> Unit = {},
-    //onFavoriteClick: (Movie) -> Unit = {},
-    favoriteButton: Unit = FavoriteButton(show = false, movie = movie)
-    //nur ein versuch, noch weiter anschaun
+    isFavorite: Boolean = false,
+    onFavoriteClick: (Movie) -> Unit = {},
+    favoriteButton: @Composable (Movie, Boolean, (Movie) -> Unit) -> Unit = { _, _, _ -> },
 ) {
     var showInfo by remember {
         mutableStateOf(false)
@@ -103,22 +101,11 @@ fun MovieRow(
                     }
                 }
             }
-            Column(modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.End) {
-
-                favoriteButton
-                /*
-                if (showFavoriteButton) {
-                    FavoriteButton(
-                        movie = movie,
-                        isFavorite = isFavorite
-                    ) { movie ->
-                        onFavoriteClick(movie)
-                    }
-
-                }
-
-                 */
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.End
+            ) {
+                favoriteButton(movie, isFavorite, onFavoriteClick)
             }
 
         }
@@ -127,31 +114,28 @@ fun MovieRow(
 
 @Composable
 fun FavoriteButton(
-    show: Boolean = true,
     movie: Movie,
-    isFavorite: Boolean = false,
+    isFavorite: Boolean,
     onFavoriteClick: (Movie) -> Unit = {}
 ) {
 
-Log.i("Mainactivity", "favoriteButton called")
-    if (show) {
+    Log.i("Mainactivity", "favoriteButton called")
 
-        IconButton(onClick = {
-            onFavoriteClick(movie)
-        }) {
-            if (!isFavorite) {
-                Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "not a favorite",
-                    //modifier = Modifier
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "is a favorite",
-                    //modifier = Modifier
-                )
-            }
+    IconButton(onClick = {
+        onFavoriteClick(movie)
+    }) {
+        if (!isFavorite) {
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder,
+                contentDescription = "not a favorite",
+                //modifier = Modifier
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                contentDescription = "is a favorite",
+                //modifier = Modifier
+            )
         }
     }
 }

@@ -60,11 +60,8 @@ fun MainContent(favorites: List<Movie>, navController: NavController) {
             items(favorites) { movie ->
                 MovieRow(
                     movie = movie,
-                    //showFavoriteButton = false,
                     onItemClick = {
                             movieID -> navController.navigate(MovieScreens.DetailScreen.name + "/$movieID")})
-                //favoriteButton = FavoriteButton(movie = movie, isFavorite = isFavoriteLambda(movie), onFavoriteClick = onFavoriteClick)
-
             }
         }
     }
