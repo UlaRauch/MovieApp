@@ -128,13 +128,13 @@ fun FavoriteButton(
             Icon(
                 imageVector = Icons.Default.FavoriteBorder,
                 contentDescription = "not a favorite",
-                //modifier = Modifier
+                tint = Color.Blue
             )
         } else {
             Icon(
                 imageVector = Icons.Default.Favorite,
                 contentDescription = "is a favorite",
-                //modifier = Modifier
+                tint = Color.Blue
             )
         }
     }

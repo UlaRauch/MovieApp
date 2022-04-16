@@ -57,11 +57,11 @@ fun HomeScreen(
     ) {
         MainContent(
             navController = navController,
-            checkIfFavorite = {
-                movie -> viewModel.movieIsFavorite(movie)
+            checkIfFavorite = { movie ->
+                viewModel.movieIsFavorite(movie)
             }
-        ) {
-            movie -> if (viewModel.movieIsFavorite(movie)) {
+        ) { movie ->
+            if (viewModel.movieIsFavorite(movie)) {
                 viewModel.removeMovie(movie)
             } else viewModel.addMovie(movie = movie)
         }
