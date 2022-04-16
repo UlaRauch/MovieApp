@@ -10,11 +10,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.movieapp.models.FavoritesViewModel
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
+import com.example.movieapp.widgets.FavoriteButton
 import com.example.movieapp.widgets.HorizontalScrollableImageView
 import com.example.movieapp.widgets.MovieRow
 
@@ -46,13 +46,13 @@ fun DetailScreen(
         }) {
         MainContent(
             movie = movie,
-            isFavoriteLambda = {
-                    movie -> viewModel.movieIsFavorite(movie)
+            isFavoriteLambda = { movie ->
+                viewModel.movieIsFavorite(movie)
             }
-            ) {
-                movie -> if (viewModel.movieIsFavorite(movie)) {
-            viewModel.removeMovie(movie)
-        } else viewModel.addMovie(movie = movie)
+        ) { movie ->
+            if (viewModel.movieIsFavorite(movie)) {
+                viewModel.removeMovie(movie)
+            } else viewModel.addMovie(movie = movie)
         }
     }
 }
@@ -62,7 +62,8 @@ fun DetailScreen(
 fun MainContent(
     movie: Movie,
     isFavoriteLambda: (Movie) -> Boolean,
-    onFavoriteClick: (Movie) -> Unit = {}) {
+    onFavoriteClick: (Movie) -> Unit = {}
+) {
 
     Surface(
         modifier = Modifier
@@ -73,9 +74,15 @@ fun MainContent(
         Column {
             MovieRow(
                 movie = movie,
-                isFavorite = isFavoriteLambda(movie),
-                showFavoriteButton = true,
-                onFavoriteClick = onFavoriteClick)
+                //isFavorite = isFavoriteLambda(movie),
+                //showFavoriteButton = true,
+                //onFavoriteClick = onFavoriteClick,
+                favoriteButton = FavoriteButton(
+                    movie = movie,
+                    isFavorite = isFavoriteLambda(movie),
+                    onFavoriteClick = onFavoriteClick
+                )
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Divider()
             Text(text = movie.title, style = MaterialTheme.typography.h5)

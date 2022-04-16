@@ -13,6 +13,7 @@ import com.example.movieapp.models.FavoritesViewModel
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 import com.example.movieapp.navigation.MovieScreens
+import com.example.movieapp.widgets.FavoriteButton
 import com.example.movieapp.widgets.MovieRow
 
 
@@ -79,13 +80,17 @@ fun MainContent(
         items(movieList) { movie ->
             MovieRow(
                 movie = movie,
-                isFavorite = isFavoriteLambda(movie),
-                showFavoriteButton = true,
-                onFavoriteClick = onFavoriteClick,
+                //isFavorite = isFavoriteLambda(movie),
+                //showFavoriteButton = true,
+                //onFavoriteClick = onFavoriteClick,
                 onItemClick = { movieID ->
                     navController.navigate("HomeScreen")
                     navController.navigate(MovieScreens.DetailScreen.name + "/$movieID")
                 },
+                favoriteButton = FavoriteButton(
+                    movie = movie,
+                    isFavorite = isFavoriteLambda(movie),
+                    onFavoriteClick = onFavoriteClick)
                 /*
                 content = {
                     favoriteButton(

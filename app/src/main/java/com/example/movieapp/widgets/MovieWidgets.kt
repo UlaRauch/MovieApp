@@ -29,11 +29,11 @@ import com.example.movieapp.models.getMovies
 @Composable
 fun MovieRow(
     movie: Movie = getMovies()[0],
-    isFavorite: Boolean = false,
-    showFavoriteButton: Boolean = true,
+    //isFavorite: Boolean = false,
+    //showFavoriteButton: Boolean = true,
     onItemClick: (String) -> Unit = {},
-    onFavoriteClick: (Movie) -> Unit = {},
-    //favoriteButton: @Composable (Movie, Boolean, (Movie) -> Unit) -> Unit
+    //onFavoriteClick: (Movie) -> Unit = {},
+    favoriteButton: Unit = FavoriteButton(show = false, movie = movie)
     //nur ein versuch, noch weiter anschaun
 ) {
     var showInfo by remember {
@@ -105,7 +105,9 @@ fun MovieRow(
             }
             Column(modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.End) {
-                //content
+
+                favoriteButton
+                /*
                 if (showFavoriteButton) {
                     FavoriteButton(
                         movie = movie,
@@ -113,7 +115,10 @@ fun MovieRow(
                     ) { movie ->
                         onFavoriteClick(movie)
                     }
+
                 }
+
+                 */
             }
 
         }
@@ -122,28 +127,31 @@ fun MovieRow(
 
 @Composable
 fun FavoriteButton(
+    show: Boolean = true,
     movie: Movie,
     isFavorite: Boolean = false,
     onFavoriteClick: (Movie) -> Unit = {}
 ) {
 
 Log.i("Mainactivity", "favoriteButton called")
+    if (show) {
 
-    IconButton(onClick = {
-        onFavoriteClick(movie)
-    }) {
-        if (!isFavorite) {
-        Icon(
-            imageVector = Icons.Default.FavoriteBorder,
-            contentDescription = "not a favorite",
-            //modifier = Modifier
-        )
-        } else {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "is a favorite",
-                //modifier = Modifier
-            )
+        IconButton(onClick = {
+            onFavoriteClick(movie)
+        }) {
+            if (!isFavorite) {
+                Icon(
+                    imageVector = Icons.Default.FavoriteBorder,
+                    contentDescription = "not a favorite",
+                    //modifier = Modifier
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "is a favorite",
+                    //modifier = Modifier
+                )
+            }
         }
     }
 }

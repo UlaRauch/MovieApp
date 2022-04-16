@@ -1,7 +1,6 @@
 package com.example.movieapp.screens
 
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,6 +15,7 @@ import androidx.navigation.NavController
 import com.example.movieapp.models.FavoritesViewModel
 import com.example.movieapp.models.Movie
 import com.example.movieapp.navigation.MovieScreens
+import com.example.movieapp.widgets.FavoriteButton
 import com.example.movieapp.widgets.MovieRow
 
 @Composable
@@ -60,10 +60,11 @@ fun MainContent(favorites: List<Movie>, navController: NavController) {
             items(favorites) { movie ->
                 MovieRow(
                     movie = movie,
-                    showFavoriteButton = false,
+                    //showFavoriteButton = false,
                     onItemClick = {
-                            movieID -> navController.navigate(MovieScreens.DetailScreen.name + "/$movieID")}) {
-                }
+                            movieID -> navController.navigate(MovieScreens.DetailScreen.name + "/$movieID")})
+                //favoriteButton = FavoriteButton(movie = movie, isFavorite = isFavoriteLambda(movie), onFavoriteClick = onFavoriteClick)
+
             }
         }
     }
