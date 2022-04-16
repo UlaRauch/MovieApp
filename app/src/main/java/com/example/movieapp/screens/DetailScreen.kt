@@ -74,6 +74,7 @@ fun MainContent(
             MovieRow(
                 movie = movie,
                 isFavorite = isFavoriteLambda(movie),
+                showFavoriteButton = true,
                 onFavoriteClick = onFavoriteClick)
             Spacer(modifier = Modifier.height(8.dp))
             Divider()

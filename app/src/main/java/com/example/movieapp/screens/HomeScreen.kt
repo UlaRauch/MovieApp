@@ -14,7 +14,6 @@ import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 import com.example.movieapp.navigation.MovieScreens
 import com.example.movieapp.widgets.MovieRow
-import com.example.movieapp.widgets.favoriteButton
 
 
 @Composable
@@ -81,6 +80,7 @@ fun MainContent(
             MovieRow(
                 movie = movie,
                 isFavorite = isFavoriteLambda(movie),
+                showFavoriteButton = true,
                 onFavoriteClick = onFavoriteClick,
                 onItemClick = { movieID ->
                     navController.navigate("HomeScreen")

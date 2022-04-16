@@ -1,6 +1,7 @@
 package com.example.movieapp.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -59,8 +60,9 @@ fun MainContent(favorites: List<Movie>, navController: NavController) {
             items(favorites) { movie ->
                 MovieRow(
                     movie = movie,
-                    isFavorite = false) { movie ->
-                    navController.navigate(route = MovieScreens.DetailScreen.name + "/${movie.id}")
+                    showFavoriteButton = false,
+                    onItemClick = {
+                            movieID -> navController.navigate(MovieScreens.DetailScreen.name + "/$movieID")}) {
                 }
             }
         }

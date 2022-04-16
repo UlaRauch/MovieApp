@@ -1,10 +1,8 @@
 package com.example.movieapp.widgets
 
 import android.util.Log
-import android.widget.HorizontalScrollView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -19,18 +17,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
-import com.example.movieapp.MainActivity
-import com.example.movieapp.R
-import com.example.movieapp.models.FavoritesViewModel
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 
@@ -39,10 +29,12 @@ import com.example.movieapp.models.getMovies
 @Composable
 fun MovieRow(
     movie: Movie = getMovies()[0],
-    isFavorite: Boolean,
+    isFavorite: Boolean = false,
+    showFavoriteButton: Boolean = true,
     onItemClick: (String) -> Unit = {},
     onFavoriteClick: (Movie) -> Unit = {},
-    //content: @Composable () -> Unit = {} //??? wirklich mit allen
+    //favoriteButton: @Composable (Movie, Boolean, (Movie) -> Unit) -> Unit
+    //nur ein versuch, noch weiter anschaun
 ) {
     var showInfo by remember {
         mutableStateOf(false)
@@ -114,12 +106,13 @@ fun MovieRow(
             Column(modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.End) {
                 //content
-
-                favoriteButton(
-                    movie = movie,
-                    isFavorite = isFavorite
-                ) {
-                    movie -> onFavoriteClick(movie)
+                if (showFavoriteButton) {
+                    FavoriteButton(
+                        movie = movie,
+                        isFavorite = isFavorite
+                    ) { movie ->
+                        onFavoriteClick(movie)
+                    }
                 }
             }
 
@@ -128,7 +121,7 @@ fun MovieRow(
 }
 
 @Composable
-fun favoriteButton(
+fun FavoriteButton(
     movie: Movie,
     isFavorite: Boolean = false,
     onFavoriteClick: (Movie) -> Unit = {}
